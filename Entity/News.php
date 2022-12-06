@@ -44,7 +44,7 @@ class News implements JsonSerializable
     #[ORM\Column(type: Types::STRING, length: 300)]
     private ?string $description = null;
 
-    #[Assert\Type(type: 'string')]
+    #[Assert\Type(type: 'int')]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
     private int $status;
 

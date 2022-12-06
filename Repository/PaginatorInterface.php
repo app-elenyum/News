@@ -2,7 +2,7 @@
 
 namespace Module\News\Repository;
 
-use App\Util\Paginator;
+use App\Utils\Paginator;
 
 interface PaginatorInterface
 {

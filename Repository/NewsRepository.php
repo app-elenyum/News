@@ -6,10 +6,11 @@ use App\Repository\GetItemForDeleteInterface;
 use App\Repository\GetItemForPutInterface;
 use App\Repository\GetItemInterface;
 use App\Repository\PaginatorInterface;
+use App\Utils\RestParams;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Module\News\Entity\News;
-use App\Util\Paginator;
+use App\Utils\Paginator;
 
 /**
  * Class NewsRepository
@@ -30,16 +31,20 @@ class NewsRepository
     }
 
     /**
+     * @param RestParams $params
+     * @return Paginator
      * @throws \Exception
      */
-    public function getPaginator(int $page, array $data = []): Paginator
+    public function getPaginator(
+        RestParams $params
+    ): Paginator
     {
         $qb = $this->createQueryBuilder('news')
             ->orderBy('news.publishedAt', 'DESC')
             ->where('news.status=:status')
             ->setParameter('status', News::STATUS_PUBLISH);
 
-        return (new Paginator($qb, Paginator::PAGE_SIZE))->paginate($page);
+        return (new Paginator($qb))->paginate($offset);
     }
 
     public function getItem(int $id): ?object
