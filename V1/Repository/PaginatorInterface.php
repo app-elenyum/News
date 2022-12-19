@@ -1,6 +1,6 @@
 <?php
 
-namespace Module\News\Repository;
+namespace Module\News\V1\Repository;
 
 use App\Utils\Paginator;
 

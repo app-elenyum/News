@@ -1,12 +1,14 @@
 <?php
 
-namespace Module\News\Entity;
+namespace Module\News\V1\Entity;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
-use JsonSerializable;
 use Doctrine\ORM\Mapping as ORM;
-use Module\News\Repository\NewsRepository;
+use JsonSerializable;
+use Module\News\V1\Repository\NewsRepository;
+use OpenApi\Attributes as OA;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
@@ -19,41 +21,55 @@ class News implements JsonSerializable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["get", "list", "del"])]
     private ?int $id = null;
 
     #[Assert\Length(min: 3, max: 200)]
     #[ORM\Column(length: 255)]
+    #[Groups(["get", "list", "post", "put"])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups(["get", "list"])]
+    #[OA\Property(type: "datetime", example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(["get", "list"])]
+    #[OA\Property(type: "datetime", example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(["get", "list"])]
+    #[OA\Property(type: "datetime", example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $publishedAt = null;
 
     #[Assert\Type(type: 'string')]
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(["get", "post", "put", "list"])]
     private ?string $text = null;
 
     #[Assert\Type(type: 'string')]
     #[Assert\Length(min: 3, max: 300)]
     #[ORM\Column(type: Types::STRING, length: 300)]
+    #[Groups(["get", "list", "post", "put"])]
     private ?string $description = null;
 
     #[Assert\Type(type: 'int')]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
+    #[Groups(["put", "list"])]
     private int $status;
 
     #[Assert\Type(type: 'string')]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[Groups(["get", "list", "post", "put"])]
     private ?string $imgUrl = null;
 
     #[Assert\Type(type: 'array')]
     #[ORM\Column(type: Types::JSON, nullable: true)]
+    #[Groups(["get", "list", "post", "put"])]
+    #[OA\Property(type: "array", items: new OA\Items(type: "string"))]
     private ?array $keywords = null;
 
     public function __construct()
@@ -207,7 +223,15 @@ class News implements JsonSerializable
     {
         return [
             'id' => $this->getId(),
-            'title' => $this->getTitle()
+            'title' => $this->getTitle(),
+            'createdAt' => $this->getCreatedAt(),
+            'updatedAt' => $this->getUpdatedAt(),
+            'publishedAt' => $this->getPublishedAt(),
+            'text' => $this->getText(),
+            'description' => $this->getDescription(),
+            'status' => $this->getStatus(),
+            'imgUrl' => $this->getImgUrl(),
+            'keywords' => $this->getKeywords(),
         ];
     }
 }
