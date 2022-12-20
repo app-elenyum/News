@@ -28,13 +28,13 @@ use OpenApi\Attributes as OA;
     )
 )]
 #[OA\Response(
-    response: 404,
+    response: 417,
     description: 'Returns error',
     content: new OA\JsonContent(
         properties: [
             new OA\Property(property: 'success', type: 'boolean', default: false),
             new OA\Property(property: 'code', type: 'integer'),
-            new OA\Property(property: 'message', type: 'integer', example: "Entity not found"),
+            new OA\Property(property: 'message', type: 'string', example: "Entity not found"),
         ]
     )
 )]
@@ -47,12 +47,15 @@ use OpenApi\Attributes as OA;
 )]
 #[Security(name: 'Bearer')]
 #[OA\Tag(name: 'news', description: 'Delete a REST API resource')]
-#[Route('/v1/news/{id}', name: 'newsDeletes', methods: Request::METHOD_DELETE)]
+#[Route('/v1/news/{id}', name: 'newsDelete', methods: Request::METHOD_DELETE)]
 class DeleteController extends BaseController
 {
     final public function __invoke(string $id, NewsService $service): Response
     {
         try {
+            //Check access
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+
             $repository = $service->getRepository();
             if (!$repository instanceof GetItemForDeleteInterface) {
                 throw new Exception('Repository not implements GetItemForDeleteInterface');

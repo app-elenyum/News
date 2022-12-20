@@ -29,13 +29,13 @@ use OpenApi\Attributes as OA;
     )
 )]
 #[OA\Response(
-    response: 500,
-    description: 'Returns error',
+    response: 417,
+    description: 'Returns error for all errors',
     content: new OA\JsonContent(
         properties: [
             new OA\Property(property: 'success', type: 'boolean', default: false),
             new OA\Property(property: 'code', type: 'integer'),
-            new OA\Property(property: 'message', type: 'integer'),
+            new OA\Property(property: 'message', type: 'string'),
         ]
     )
 )]
@@ -47,6 +47,9 @@ class GetController extends BaseController
     final public function __invoke(int $id, NewsService $service): Response
     {
         try {
+            //Check access
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+
             $repository = $service->getRepository();
             if (!$repository instanceof GetItemInterface) {
                 throw new Exception('Repository not implements GetItemInterface');
@@ -57,7 +60,7 @@ class GetController extends BaseController
                     'success' => false,
                     'code' => Response::HTTP_NOT_FOUND,
                     'message' => 'Entity not found'
-                ]);
+                ], Response::HTTP_NOT_FOUND);
             }
 
             return $this->json([
@@ -70,7 +73,7 @@ class GetController extends BaseController
                 'success' => false,
                 'code' => Response::HTTP_EXPECTATION_FAILED,
                 'message' => $e->getMessage(),
-            ]);
+            ], Response::HTTP_EXPECTATION_FAILED);
         }
     }
 }

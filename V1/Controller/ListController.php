@@ -35,13 +35,13 @@ use Symfony\Component\Routing\Annotation\Route;
     )
 )]
 #[OA\Response(
-    response: 500,
+    response: 417,
     description: 'Returns error',
     content: new OA\JsonContent(
         properties: [
             new OA\Property(property: 'success', type: 'boolean', default: false),
             new OA\Property(property: 'code', type: 'integer'),
-            new OA\Property(property: 'message', type: 'integer'),
+            new OA\Property(property: 'message', type: 'string'),
         ]
     )
 )]

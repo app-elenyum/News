@@ -22,6 +22,43 @@ use Nelmio\ApiDocBundle\Annotation\Security;
         ref: new Model(type: News::class, groups: ["put"])
     )
 )]
+#[OA\Response(
+    response: 200,
+    description: 'Returns error if invalid data',
+    content: new OA\JsonContent(
+        properties: [
+            new OA\Property(property: 'success', type: 'boolean', default: false),
+            new OA\Property(property: 'code', type: 'integer'),
+            new OA\Property(
+                property: 'item',
+                ref: new Model(type: News::class, groups: ["put"])
+            ),
+        ]
+    )
+)]
+#[OA\Response(
+    response: 400,
+    description: 'Returns error if invalid data',
+    content: new OA\JsonContent(
+        properties: [
+            new OA\Property(property: 'success', type: 'boolean', default: false),
+            new OA\Property(property: 'code', type: 'integer'),
+            new OA\Property(property: 'message', type: 'integer'),
+            new OA\Property(property: 'errors', type: 'array', items: new OA\Items(type: 'string'))
+        ]
+    )
+)]
+#[OA\Response(
+    response: 417,
+    description: 'Returns error',
+    content: new OA\JsonContent(
+        properties: [
+            new OA\Property(property: 'success', type: 'boolean', default: false),
+            new OA\Property(property: 'code', type: 'integer'),
+            new OA\Property(property: 'message', type: 'integer'),
+        ]
+    )
+)]
 #[Security(name: 'Bearer')]
 #[OA\Tag(name: 'news')]
 #[Route(path: '/v1/news/{id<\d+>}', name: 'newsPut', methods: Request::METHOD_PUT)]
@@ -53,7 +90,7 @@ class PutController extends BaseController
         } catch (ValidationException $e) {
             return $this->json([
                 'success' => false,
-                'code' => Response::HTTP_EXPECTATION_FAILED,
+                'code' => Response::HTTP_BAD_REQUEST,
                 'message' => $e->getMessage(),
                 'errors' => json_decode($e->getMessage()),
             ]);
