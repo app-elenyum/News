@@ -21,55 +21,55 @@ class News implements JsonSerializable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["get", "list", "del"])]
+    #[Groups(['get', 'list', 'del'])]
     private ?int $id = null;
 
     #[Assert\Length(min: 3, max: 200)]
     #[ORM\Column(length: 255)]
-    #[Groups(["get", "list", "post", "put"])]
+    #[Groups(['get', 'list', 'post', 'put'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Groups(["get", "list"])]
-    #[OA\Property(type: "datetime", example: '2012-01-18T11:45:00+03:00')]
+    #[Groups(['get', 'list'])]
+    #[OA\Property(type: 'datetime', example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    #[Groups(["get", "list"])]
-    #[OA\Property(type: "datetime", example: '2012-01-18T11:45:00+03:00')]
+    #[Groups(['get', 'list'])]
+    #[OA\Property(type: 'datetime', example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    #[Groups(["get", "list"])]
-    #[OA\Property(type: "datetime", example: '2012-01-18T11:45:00+03:00')]
+    #[Groups(['get', 'list'])]
+    #[OA\Property(type: 'datetime', example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $publishedAt = null;
 
     #[Assert\Type(type: 'string')]
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(["get", "post", "put", "list"])]
+    #[Groups(['get', 'post', 'put', 'list'])]
     private ?string $text = null;
 
     #[Assert\Type(type: 'string')]
     #[Assert\Length(min: 3, max: 300)]
     #[ORM\Column(type: Types::STRING, length: 300)]
-    #[Groups(["get", "list", "post", "put"])]
+    #[Groups(['get', 'list', 'post', 'put'])]
     private ?string $description = null;
 
     #[Assert\Type(type: 'int')]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
-    #[Groups(["put", "list"])]
+    #[Groups(['put', 'list'])]
     private int $status;
 
     #[Assert\Type(type: 'string')]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    #[Groups(["get", "list", "post", "put"])]
+    #[Groups(['get', 'list', 'post', 'put'])]
     private ?string $imgUrl = null;
 
     #[Assert\Type(type: 'array')]
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(["get", "list", "post", "put"])]
-    #[OA\Property(type: "array", items: new OA\Items(type: "string"))]
+    #[Groups(['get', 'list', 'post', 'put'])]
+    #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
     private ?array $keywords = null;
 
     public function __construct()
