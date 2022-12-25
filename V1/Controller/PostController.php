@@ -59,7 +59,7 @@ use OpenApi\Attributes as OA;
     )
 )]
 #[Security(name: 'Bearer')]
-#[OA\Tag(name: 'news')]
+#[OA\Tag(name: 'News')]
 #[Route(path: '/v1/news', name: 'newsPost', methods: Request::METHOD_POST)]
 class PostController extends BaseController
 {
@@ -69,6 +69,9 @@ class PostController extends BaseController
     final public function __invoke(Request $request, NewsService $service): Response
     {
         try {
+            //Check access
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+
             $item = $service->toEntity($request->getContent());
             $service->getEntityManager()->persist($item);
             $service->getEntityManager()->flush();

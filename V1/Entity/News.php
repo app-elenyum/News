@@ -21,7 +21,7 @@ class News implements JsonSerializable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get', 'list', 'del'])]
+    #[Groups(['list', 'del'])]
     private ?int $id = null;
 
     #[Assert\Length(min: 3, max: 200)]
@@ -31,18 +31,18 @@ class News implements JsonSerializable
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['get', 'list'])]
-    #[OA\Property(type: 'datetime', example: '2012-01-18T11:45:00+03:00')]
+    #[OA\Property(type: 'string', format: 'datetime', example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Groups(['get', 'list'])]
-    #[OA\Property(type: 'datetime', example: '2012-01-18T11:45:00+03:00')]
+    #[OA\Property(type: 'string', format: 'datetime', example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Groups(['get', 'list'])]
-    #[OA\Property(type: 'datetime', example: '2012-01-18T11:45:00+03:00')]
+    #[OA\Property(type: 'string', format: 'datetime', example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $publishedAt = null;
 
     #[Assert\Type(type: 'string')]

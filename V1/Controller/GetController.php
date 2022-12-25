@@ -3,6 +3,7 @@
 namespace Module\News\V1\Controller;
 
 use App\Controller\BaseController;
+use App\Exception\UndefinedEntity;
 use App\Repository\GetItemInterface;
 use Exception;
 use Module\News\V1\Entity\News;
@@ -40,7 +41,7 @@ use OpenApi\Attributes as OA;
     )
 )]
 #[Security(name: 'Bearer')]
-#[OA\Tag(name: 'news')]
+#[OA\Tag(name: 'News')]
 #[Route(path: '/v1/news/{id<\d+>}', name: 'newsGet', methods: Request::METHOD_GET)]
 class GetController extends BaseController
 {
@@ -56,11 +57,7 @@ class GetController extends BaseController
             }
             $item = $repository->getItem($id);
             if ($item === null) {
-                return $this->json([
-                    'success' => false,
-                    'code' => Response::HTTP_NOT_FOUND,
-                    'message' => 'Entity not found'
-                ], Response::HTTP_NOT_FOUND);
+                throw new UndefinedEntity(\App\Entity\News::class, $id);
             }
 
             return $this->json([

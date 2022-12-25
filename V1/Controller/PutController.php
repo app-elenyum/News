@@ -3,6 +3,7 @@
 namespace Module\News\V1\Controller;
 
 use App\Controller\BaseController;
+use App\Exception\UndefinedEntity;
 use App\Repository\GetItemForPutInterface;
 use App\Validator\ValidationException;
 use Exception;
@@ -60,23 +61,23 @@ use Nelmio\ApiDocBundle\Annotation\Security;
     )
 )]
 #[Security(name: 'Bearer')]
-#[OA\Tag(name: 'news')]
+#[OA\Tag(name: 'News')]
 #[Route(path: '/v1/news/{id<\d+>}', name: 'newsPut', methods: Request::METHOD_PUT)]
 class PutController extends BaseController
 {
     final public function __invoke(int $id, Request $request, NewsService $service): Response
     {
         try {
+            //Check access
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+
             $repository = $service->getRepository();
             if (!$repository instanceof GetItemForPutInterface) {
                 throw new Exception('Repository not implements GetItemForPutInterface');
             }
             $item = $repository->findOneBy(['id' => $id]);
             if ($item === null) {
-                return $this->json([
-                    'success' => false,
-                    'code' => Response::HTTP_NOT_FOUND,
-                ]);
+                throw new UndefinedEntity(News::class, $id);
             }
 
             $service->updateEntity($item, $request->getContent());

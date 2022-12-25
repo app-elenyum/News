@@ -75,13 +75,16 @@ use Symfony\Component\Routing\Annotation\Route;
     schema: new OA\Schema(type: 'string')
 )]
 #[Security(name: 'Bearer')]
-#[OA\Tag(name: 'news')]
+#[OA\Tag(name: 'News')]
 #[Route(path: '/v1/news', name: 'newsList', methods: Request::METHOD_GET)]
 class ListController extends BaseController
 {
     final public function __invoke(Request $request, NewsService $service): Response
     {
         try {
+            //Check access
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+
             $repository = $service->getRepository();
             if (!$repository instanceof PaginatorInterface) {
                 throw new Exception('Repository not implements PaginatorInterface');

@@ -3,8 +3,10 @@
 namespace Module\News\V1\Controller;
 
 use App\Controller\BaseController;
+use App\Exception\UndefinedEntity;
 use App\Repository\GetItemForDeleteInterface;
 use Exception;
+use Module\News\V1\Entity\News;
 use Module\News\V1\Service\NewsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +48,7 @@ use OpenApi\Attributes as OA;
     example: [1,2,3]
 )]
 #[Security(name: 'Bearer')]
-#[OA\Tag(name: 'news', description: 'Delete a REST API resource')]
+#[OA\Tag(name: 'News')]
 #[Route('/v1/news/{id}', name: 'newsDelete', methods: Request::METHOD_DELETE)]
 class DeleteController extends BaseController
 {
@@ -64,21 +66,24 @@ class DeleteController extends BaseController
 
             $items = $repository->getItemsForDelete($allId);
             if (empty($items)) {
-                return $this->json([
-                    'success' => false,
-                    'code' => Response::HTTP_NOT_FOUND,
-                    'message' => 'Entity not found'
-                ]);
+                throw new UndefinedEntity(News::class, $id);
             }
             foreach ($items as $item) {
                 $service->getEntityManager()->remove($item);
+            }
+            $deletedId = [];
+            foreach ($items as $item) {
+                if ($item instanceof News) {
+                    $deletedId[] = $item->getId();
+                    $service->getEntityManager()->remove($item);
+                }
             }
             $service->getEntityManager()->flush();
 
             return $this->json([
                 'success' => true,
                 'code' => Response::HTTP_OK,
-                'id' => $allId,
+                'id' => $deletedId,
             ]);
         } catch (Exception $e) {
             return $this->json([
