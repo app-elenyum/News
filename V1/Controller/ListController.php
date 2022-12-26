@@ -74,7 +74,7 @@ use Symfony\Component\Routing\Annotation\Route;
     in: 'query',
     schema: new OA\Schema(type: 'string')
 )]
-#[Security(name: 'Bearer')]
+#[Security(name: null)]
 #[OA\Tag(name: 'News')]
 #[Route(path: '/v1/news', name: 'newsList', methods: Request::METHOD_GET)]
 class ListController extends BaseController

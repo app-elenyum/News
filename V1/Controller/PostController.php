@@ -23,10 +23,10 @@ use OpenApi\Attributes as OA;
 )]
 #[OA\Response(
     response: 200,
-    description: 'Returns error if invalid data',
+    description: 'Add news',
     content: new OA\JsonContent(
         properties: [
-            new OA\Property(property: 'success', type: 'boolean', default: false),
+            new OA\Property(property: 'success', type: 'boolean', default: true),
             new OA\Property(property: 'code', type: 'integer'),
             new OA\Property(
                 property: 'item',
@@ -35,6 +35,7 @@ use OpenApi\Attributes as OA;
         ]
     )
 )]
+
 #[OA\Response(
     response: 400,
     description: 'Returns error if invalid data',
@@ -58,7 +59,7 @@ use OpenApi\Attributes as OA;
         ]
     )
 )]
-#[Security(name: 'Bearer')]
+#[Security(name: null)]
 #[OA\Tag(name: 'News')]
 #[Route(path: '/v1/news', name: 'newsPost', methods: Request::METHOD_POST)]
 class PostController extends BaseController

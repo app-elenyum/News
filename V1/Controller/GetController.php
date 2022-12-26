@@ -40,7 +40,7 @@ use OpenApi\Attributes as OA;
         ]
     )
 )]
-#[Security(name: 'Bearer')]
+#[Security(name: null)]
 #[OA\Tag(name: 'News')]
 #[Route(path: '/v1/news/{id<\d+>}', name: 'newsGet', methods: Request::METHOD_GET)]
 class GetController extends BaseController

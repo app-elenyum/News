@@ -25,7 +25,7 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 )]
 #[OA\Response(
     response: 200,
-    description: 'Returns error if invalid data',
+    description: 'Update news',
     content: new OA\JsonContent(
         properties: [
             new OA\Property(property: 'success', type: 'boolean', default: false),
@@ -60,7 +60,7 @@ use Nelmio\ApiDocBundle\Annotation\Security;
         ]
     )
 )]
-#[Security(name: 'Bearer')]
+#[Security(name: null)]
 #[OA\Tag(name: 'News')]
 #[Route(path: '/v1/news/{id<\d+>}', name: 'newsPut', methods: Request::METHOD_PUT)]
 class PutController extends BaseController
