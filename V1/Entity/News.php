@@ -2,10 +2,10 @@
 
 namespace Module\News\V1\Entity;
 
+use App\Entity\BaseEntity;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 use Module\News\V1\Repository\NewsRepository;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
 #[ORM\Table(name: 'news')]
-class News implements JsonSerializable
+class News extends BaseEntity
 {
     public const STATUS_NEW = 10;
     public const STATUS_PUBLISH = 20;
@@ -217,21 +217,5 @@ class News implements JsonSerializable
         $this->keywords = $keywords;
 
         return $this;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'createdAt' => $this->getCreatedAt(),
-            'updatedAt' => $this->getUpdatedAt(),
-            'publishedAt' => $this->getPublishedAt(),
-            'text' => $this->getText(),
-            'description' => $this->getDescription(),
-            'status' => $this->getStatus(),
-            'imgUrl' => $this->getImgUrl(),
-            'keywords' => $this->getKeywords(),
-        ];
     }
 }

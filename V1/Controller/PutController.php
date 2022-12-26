@@ -75,8 +75,8 @@ class PutController extends BaseController
             if (!$repository instanceof GetItemForPutInterface) {
                 throw new Exception('Repository not implements GetItemForPutInterface');
             }
-            $item = $repository->findOneBy(['id' => $id]);
-            if ($item === null) {
+            $item = $repository->getItemForPut($id);
+            if (!$item instanceof News) {
                 throw new UndefinedEntity(News::class, $id);
             }
 
@@ -86,7 +86,7 @@ class PutController extends BaseController
             return $this->json([
                 'success' => true,
                 'code' => Response::HTTP_OK,
-                'item' => $item,
+                'item' => $item->toArray('put'),
             ]);
         } catch (ValidationException $e) {
             return $this->json([

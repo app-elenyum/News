@@ -73,13 +73,16 @@ class PostController extends BaseController
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
 
             $item = $service->toEntity($request->getContent());
+            if (!$item instanceof News) {
+                throw new Exception('Repository not implements User');
+            }
             $service->getEntityManager()->persist($item);
             $service->getEntityManager()->flush();
 
             return $this->json([
                 'success' => true,
                 'code' => Response::HTTP_OK,
-                'item' => $item,
+                'item' => $item->toArray('post'),
             ]);
         } catch (ValidationException $e) {
             return $this->json([

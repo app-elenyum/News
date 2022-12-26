@@ -56,14 +56,14 @@ class GetController extends BaseController
                 throw new Exception('Repository not implements GetItemInterface');
             }
             $item = $repository->getItem($id);
-            if ($item === null) {
-                throw new UndefinedEntity(\App\Entity\News::class, $id);
+            if (!$item instanceof News) {
+                throw new UndefinedEntity(News::class, $id);
             }
 
             return $this->json([
                 'success' => true,
                 'code' => Response::HTTP_OK,
-                'item' => $item,
+                'item' => $item->toArray('get'),
             ]);
         } catch (Exception $e) {
             return $this->json([

@@ -74,7 +74,7 @@ class DeleteController extends BaseController
             $deletedId = [];
             foreach ($items as $item) {
                 if ($item instanceof News) {
-                    $deletedId[] = $item->getId();
+                    $deletedId[] = $item->toArray('del');
                     $service->getEntityManager()->remove($item);
                 }
             }
