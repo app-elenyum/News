@@ -17,7 +17,7 @@ use OpenApi\Attributes as OA;
 
 #[OA\Response(
     response: 200,
-    description: 'Model news',
+    description: 'Get model news by id',
     content: new OA\JsonContent(
         properties: [
             new OA\Property(property: 'success', type: 'boolean', default: true),

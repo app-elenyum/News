@@ -16,7 +16,7 @@ use OpenApi\Attributes as OA;
 
 //POST - Create a REST API resource
 #[OA\RequestBody(
-    description: 'Model news',
+    description: 'Add model news',
     content: new OA\JsonContent(
         ref: new Model(type: News::class, groups: ["post"])
     )
@@ -30,7 +30,7 @@ use OpenApi\Attributes as OA;
             new OA\Property(property: 'code', type: 'integer'),
             new OA\Property(
                 property: 'item',
-                ref: new Model(type: News::class, groups: ["post"])
+                ref: new Model(type: News::class, groups: ["get"])
             ),
         ]
     )
@@ -83,7 +83,7 @@ class PostController extends BaseController
             return $this->json([
                 'success' => true,
                 'code' => Response::HTTP_OK,
-                'item' => $item->toArray('post'),
+                'item' => $item->toArray('get'),
             ]);
         } catch (ValidationException $e) {
             return $this->json([

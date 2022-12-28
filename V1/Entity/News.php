@@ -21,7 +21,7 @@ class News extends BaseEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['list', 'del'])]
+    #[Groups(['list', 'del', 'post'])]
     private ?int $id = null;
 
     #[Assert\Length(min: 3, max: 200)]

@@ -18,7 +18,7 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 
 //Update a REST API resource
 #[OA\RequestBody(
-    description: 'Model news',
+    description: 'Update model news',
     content: new OA\JsonContent(
         ref: new Model(type: News::class, groups: ["put"])
     )
