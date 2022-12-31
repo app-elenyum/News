@@ -24,7 +24,7 @@ use OpenApi\Attributes as OA;
             new OA\Property(property: 'code', type: 'integer', default: 200),
             new OA\Property(
                 property: 'item',
-                ref: new Model(type: News::class, groups: ["list"])
+                ref: new Model(type: News::class, groups: ["get"])
             ),
         ]
     )

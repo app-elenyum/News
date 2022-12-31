@@ -6,7 +6,6 @@ use App\Controller\BaseController;
 use App\Exception\UndefinedEntity;
 use App\Repository\GetItemForDeleteInterface;
 use Exception;
-use Module\Img\V1\Entity\Image;
 use Module\News\V1\Entity\News;
 use Module\News\V1\Service\NewsService;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -25,7 +24,7 @@ use OpenApi\Attributes as OA;
             new OA\Property(property: 'code', type: 'integer', default: 200),
             new OA\Property(
                 property: 'items',
-                ref: new Model(type: Image::class, groups: ["del"])
+                ref: new Model(type: News::class, groups: ["del"])
             ),
         ]
     )

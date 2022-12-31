@@ -47,12 +47,12 @@ class News extends BaseEntity
 
     #[Assert\Type(type: 'string')]
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['get', 'post', 'put', 'list'])]
+    #[Groups(['get', 'post', 'put'])]
     private ?string $text = null;
 
     #[Assert\Type(type: 'string')]
-    #[Assert\Length(min: 3, max: 300)]
-    #[ORM\Column(type: Types::STRING, length: 300)]
+    #[Assert\Length(min: 5, max: 400)]
+    #[ORM\Column(type: Types::STRING, length: 400)]
     #[Groups(['get', 'list', 'post', 'put'])]
     private ?string $description = null;
 

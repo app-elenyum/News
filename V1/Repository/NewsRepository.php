@@ -21,4 +21,9 @@ class NewsRepository extends BaseRepository
     {
         parent::__construct($registry, News::class);
     }
+
+    public function getItem(int $id): ?object
+    {
+        return $this->findOneBy(['id' => $id, 'status' => News::STATUS_PUBLISH]);
+    }
 }
