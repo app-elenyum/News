@@ -6,9 +6,12 @@ use App\Entity\BaseEntity;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Module\News\V1\Repository\NewsRepository;
 use OpenApi\Attributes as OA;
+use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
@@ -21,7 +24,7 @@ class News extends BaseEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['list', 'del', 'post'])]
+    #[Groups(['list', 'del', 'post', 'get'])]
     private ?int $id = null;
 
     #[Assert\Length(min: 3, max: 200)]
@@ -39,9 +42,8 @@ class News extends BaseEntity
     #[OA\Property(type: 'string', format: 'datetime', example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[Assert\DateTime]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    #[Groups(['get', 'list'])]
+    #[Groups(['get', 'list', 'put'])]
     #[OA\Property(type: 'string', format: 'datetime', example: '2012-01-18T11:45:00+03:00')]
     private ?\DateTimeImmutable $publishedAt = null;
 
@@ -128,11 +130,18 @@ class News extends BaseEntity
     }
 
     /**
-     * @param DateTimeImmutable|null $publishedAt
+     * @param DateTimeImmutable|string|null $publishedAt
      * @return News
+     * @throws Exception
      */
-    public function setPublishedAt(?DateTimeImmutable $publishedAt): self
+    public function setPublishedAt(DateTimeImmutable|string|null $publishedAt): self
     {
+        if (is_string($publishedAt)) {
+            $publishedAt = DateTimeImmutable::createFromFormat(DATE_ATOM, $publishedAt);
+            if ($publishedAt === false) {
+                throw new Exception('in correct datetime');
+            }
+        }
         $this->publishedAt = $publishedAt;
 
         return $this;
